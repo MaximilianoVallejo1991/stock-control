@@ -4,10 +4,14 @@ import { useTheme } from "../context/ThemeContext";
 import { FaBars } from "react-icons/fa";
 import ThemedButton from "./ThemedButton";
 import ThemeToggle from "./ThemeToggle";
+import useUserStore from "../store/userStore";
 
-const Sidebar = ({ user, menuItems = [], onLogout }) => {
+const Sidebar = ({ menuItems = [], onLogout }) => {
   const { theme } = useTheme();
   const [isOpen, setIsOpen] = useState(true);
+  const  user = useUserStore((state) => state.user);
+  const clearUser  = useUserStore((state) => state.clearUser);
+
 
   return (
     <div
@@ -28,14 +32,14 @@ const Sidebar = ({ user, menuItems = [], onLogout }) => {
         {/* Perfil */}
         <div className="flex flex-col items-center p-4 gap-2">
           <img
-            src={user.avatar || "/default-avatar.png"}
+            src={user?.profilePic}
             alt="Perfil"
             className="w-16 h-16 rounded-full"
           />
           {isOpen && (
             <>
-              <p className="font-semibold">{user.name}</p>
-              <p className="text-sm italic">{user.role}</p>
+              <p className="font-semibold">{user?.name}</p>
+              <p className="text-sm italic">{user?.role}</p>
             </>
           )}
         </div>
@@ -55,10 +59,20 @@ const Sidebar = ({ user, menuItems = [], onLogout }) => {
       </div>
 
       {/* Footer: Toggle + Logout */}
-      <div className={`transition-all duration-50 ${isOpen ? "opacity-100 w-full" : "opacity-0 w-0 overflow-hidden"} flex flex-col gap-2 p-6`}>
- 
+      <div
+        className={`transition-all duration-50 ${
+          isOpen ? "opacity-100 w-full" : "opacity-0 w-0 overflow-hidden"
+        } flex flex-col gap-2 p-6`}
+      >
         <ThemeToggle />
-        <ThemedButton onClick={onLogout}>Cerrar sesión</ThemedButton>
+        <ThemedButton
+          onClick={() => {
+            onLogout();
+            clearUser();
+          }}
+        >
+          Cerrar sesión
+        </ThemedButton>
       </div>
     </div>
   );

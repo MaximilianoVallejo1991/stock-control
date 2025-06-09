@@ -5,9 +5,14 @@ import ThemeToggle from "../components/ThemeToggle";
 import { useTheme } from "../context/ThemeContext";
 import ThemedButton from "../components/ThemedButton";
 import ThemedInput from "../components/ThemedInput";
+import useUserStore from '../store/userStore';
+
 
 const LoginPage = () => {
   const { theme } = useTheme();
+
+  const setUser = useUserStore((state) => state.setUser);
+
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -50,6 +55,9 @@ const LoginPage = () => {
       });
 
       localStorage.setItem("token", res.data.token);
+
+      setUser(res.data.user);
+
       navigate("/mainPanel");
     } catch (err) {
       setError("Credenciales incorrectas");
