@@ -55,7 +55,8 @@ const Sidebar = ({ user, menuItems = [], onLogout }) => {
       </div>
 
       {/* Footer: Toggle + Logout */}
-      <div className="w p-4 flex flex-col gap-2 items-center">
+      <div className={`transition-all duration-50 ${isOpen ? "opacity-100 w-full" : "opacity-0 w-0 overflow-hidden"} flex flex-col gap-2 p-6`}>
+ 
         <ThemeToggle />
         <ThemedButton onClick={onLogout}>Cerrar sesión</ThemedButton>
       </div>
