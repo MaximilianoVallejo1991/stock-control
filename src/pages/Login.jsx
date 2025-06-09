@@ -12,10 +12,36 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({
+    email: "",
+    password: "",
+  });
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
+    setFieldErrors({ email: "", password: "" });
+
+    let hasError = false;
+    const newErrors = { email: "", password: "" };
+
+    if (!email.trim()) {
+      newErrors.email = "El correo es obligatorio";
+      hasError = true;
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = "Formato de correo inválido";
+      hasError = true;
+    }
+
+    if (!password.trim()) {
+      newErrors.password = "La contraseña es obligatoria";
+      hasError = true;
+    }
+
+    if (hasError) {
+      setFieldErrors(newErrors);
+      return;
+    }
 
     try {
       const res = await axios.post("http://localhost:3000/api/auth/login", {
@@ -40,14 +66,14 @@ const LoginPage = () => {
         style={{ backgroundColor: theme.bg2, color: theme.text }}
       >
         <div className="pb-4 flex flex-row align-super items-center justify-between">
+          <h2 className="text-2xl font-bold ">Iniciar Sesión</h2>
 
-        <h2 className="text-2xl font-bold ">Iniciar Sesión</h2>
-
-        <ThemeToggle />
-        
+          <ThemeToggle />
         </div>
         <form onSubmit={handleLogin} className="flex flex-col gap-4">
-          
+          {fieldErrors.email && (
+            <p className="text-red-500 text-sm -mt-2">{fieldErrors.email}</p>
+          )}
           <ThemedInput
             type="email"
             placeholder="Correo"
@@ -56,6 +82,9 @@ const LoginPage = () => {
             name="email"
           />
 
+          {fieldErrors.password && (
+            <p className="text-red-500 text-sm -mt-2">{fieldErrors.password}</p>
+          )}
           <ThemedInput
             type="password"
             placeholder="Contraseña"
@@ -64,7 +93,9 @@ const LoginPage = () => {
             name="password"
           />
 
+          {error && <p className="text-red-600 text-center mt-2">{error}</p>}
           <ThemedButton type="submit">Iniciar sesión</ThemedButton>
+
         </form>
       </div>
     </div>
