@@ -4,6 +4,7 @@ import axios from "axios";
 import ThemeToggle from "../components/ThemeToggle";
 import { useTheme } from "../context/ThemeContext";
 import ThemedButton from "../components/ThemedButton";
+import ThemedInput from "../components/ThemedInput";
 
 const LoginPage = () => {
   const { theme } = useTheme();
@@ -31,30 +32,38 @@ const LoginPage = () => {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center"
+      className="min-h-screen flex items-center  justify-center"
       style={{ backgroundColor: theme.bg, color: theme.text }}
     >
       <div
-        className="bg-white p-8 rounded shadow-md w-full max-w-md"
+        className="p-6 rounded shadow-md w-full max-w-md"
         style={{ backgroundColor: theme.bg2, color: theme.text }}
       >
+        <div className="pb-4 flex flex-row align-super items-center justify-between">
+
+        <h2 className="text-2xl font-bold ">Iniciar Sesión</h2>
+
         <ThemeToggle />
-        <h2 className="text-2xl font-bold mb-6">Iniciar Sesión</h2>
+        
+        </div>
         <form onSubmit={handleLogin} className="flex flex-col gap-4">
-          <input
-            className="p-2 rounded border"
+          
+          <ThemedInput
             type="email"
             placeholder="Correo"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            name="email"
           />
-          <input
-            className="p-2 rounded border"
+
+          <ThemedInput
             type="password"
             placeholder="Contraseña"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            name="password"
           />
+
           <ThemedButton type="submit">Iniciar sesión</ThemedButton>
         </form>
       </div>
